@@ -97,11 +97,11 @@ from sklearn.metrics import classification_report, confusion_matrix, ConfusionMa
 
 ## **Key Findings**
 
-| Model                     | Precision | Recall | F1-score | Interpretation                                                                            |
-| ------------------------- | --------- | ------ | -------- | ----------------------------------------------------------------------------------------- |
-| **Baseline LR (M1)**      | 0.85      | 0.63   | 0.72     | Performs cautiously, with good precision but misses many fraud cases.                     |
-| **GMM Oversampling (M2)** | 0.56      | 0.85   | 0.68     | Improves fraud detection (recall) but sacrifices precision, leading to more false alarms. |
-| **GMM + CBU (M3)**        | 0.01      | 0.91   | 0.01     | Overpredicts fraud, achieving very high recall but unusable precision.                    |
+| Model                     | Precision | Recall | F1-score | Interpretation                                                                       |
+| ------------------------- | --------- | ------ | -------- | ------------------------------------------------------------------------------------ |
+| **Baseline LR (M1)**      | 0.85      | 0.63   | 0.72     | Balanced model; strong precision but misses some fraud cases.                        |
+| **GMM Oversampling (M2)** | 0.08      | 0.86   | 0.15     | Detects more fraud (recall) but produces many false positives due to poor precision. |
+| **GMM + CBU (M3)**        | 0.07      | 0.87   | 0.12     | Extreme recall with collapsed precision; predicts almost everything as fraud.        |
 
 ---
 
@@ -113,11 +113,11 @@ from sklearn.metrics import classification_report, confusion_matrix, ConfusionMa
 * However, oversampling introduces noise and overlap with the majority class, reducing precision.
 * Adding CBU further worsens precision by oversimplifying majority class structure.
 
-**Performance Summary:**
+**Performance Summary**
 
-* Baseline strikes a better balance between precision and recall.
-* GMM oversampling helps recall but inflates false positives.
-* GMM + CBU leads to extreme imbalance in metrics and poor practical utility.
+* **Baseline (M1):** Provides the most balanced performance with strong precision and reasonable recall.
+* **GMM Oversampling (M2):** Greatly boosts recall (0.86) but at a steep cost — precision drops to 0.08, leading to many false positives.
+* **GMM + CBU (M3):** Pushes recall slightly higher (0.87) but precision collapses further (0.07), making it impractical despite its minority coverage.
 
 **Recommendation:**
-GMM-based oversampling is useful when **maximizing recall** is the priority (e.g., in fraud detection, where missing a fraud is costlier than false alarms). However, it should not be used alone — additional regularization, threshold tuning, or hybrid ensemble methods are required to control false positives. For this dataset, the **baseline logistic regression (M1)** remains the most balanced approach, with GMM oversampling (M2) only recommended in contexts where recall is paramount.
+If **maximizing recall** is critical (e.g., fraud detection), GMM-based oversampling (M2 or M3) can be useful but must be paired with **threshold tuning, regularization, or ensemble methods** to reduce false positives. For general use, **baseline logistic regression (M1)** remains the most balanced and reliable option.
